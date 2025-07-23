@@ -7,6 +7,7 @@ import com.springbootplayground.crudmongo.dto.LoginRequest;
 import com.springbootplayground.crudmongo.dto.RegisterRequest;
 import com.springbootplayground.crudmongo.model.User;
 import com.springbootplayground.crudmongo.repository.UserRepository;
+import com.springbootplayground.crudmongo.service.security.jwtService;
 
 @Service
 public class UserService {

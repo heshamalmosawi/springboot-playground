@@ -1,4 +1,4 @@
-package com.springbootplayground.crudmongo.service;
+package com.springbootplayground.crudmongo.service.security;
 
 import java.security.Key;
 import java.util.Date;
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.springbootplayground.crudmongo.model.User;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -27,4 +29,18 @@ public class jwtService {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    public Claims extractAllClaims(String token) throws JwtException {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(key).build()
+                    .parseSignedClaims(token)
+                    .getBody();
+
+        } catch (JwtException e) {
+            // catch null, wrong token, expired token
+            throw new JwtException(e.getMessage());
+        }
+    }
+
 }
