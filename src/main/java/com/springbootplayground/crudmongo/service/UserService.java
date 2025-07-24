@@ -1,5 +1,7 @@
 package com.springbootplayground.crudmongo.service;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +69,43 @@ public class UserService {
         }
 
         return jwtService.generateToken(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll()
+                .stream()
+                .peek(user -> user.setPassword(null)) // hide password
+                .toList();
+    }
+
+    public User getById(String id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User updateUser(String id, User user) {
+        User existingUser = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getName() != null && !user.getName().isEmpty()) {
+            existingUser.setName(user.getName());
+        }
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")) {
+                throw new RuntimeException("Invalid email format");
+            }
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        return userRepo.save(existingUser);
+    }
+
+    public void deleteUser(String id) {
+        User existingUser = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepo.delete(existingUser);
     }
 }

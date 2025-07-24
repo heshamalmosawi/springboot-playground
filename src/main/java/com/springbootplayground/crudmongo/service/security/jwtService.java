@@ -32,11 +32,12 @@ public class jwtService {
 
     public Claims extractAllClaims(String token) throws JwtException {
         try {
-            return Jwts.parser()
+            var x = Jwts.parser()
                     .setSigningKey(key).build()
                     .parseSignedClaims(token)
                     .getBody();
-
+            System.out.println("claims:" + x);
+            return x;
         } catch (JwtException e) {
             // catch null, wrong token, expired token
             throw new JwtException(e.getMessage());

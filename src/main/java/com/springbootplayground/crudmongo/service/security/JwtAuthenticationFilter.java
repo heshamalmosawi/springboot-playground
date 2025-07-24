@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.err.println("JwtAuthenticationFilter: Found Authorization header, validating token...");
+        System.out.println("JwtAuthenticationFilter: Found Authorization header, validating token...");
 
         String token = authHeader.substring(7);
         try {
@@ -59,13 +59,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             var claims = jwtService.extractAllClaims(token);
             String email = claims.getSubject();
             String role = (String) claims.get("role");
-
+            System.out.println("JwtAuthenticationFilter: Token claims extracted - Email: " + email + ", Role: " + role);
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // Create authorities list
                 var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-
+                System.out.println("JwtAuthenticationFilter: Authorities created for user: " + email + " with role: " + role);
                 // Set the Authentication in SecurityContext
-                var auth = new UsernamePasswordAuthenticationToken(email, null, authorities);
+                var userDetails = new org.springframework.security.core.userdetails.User(email, "", authorities);
+                var auth = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
 

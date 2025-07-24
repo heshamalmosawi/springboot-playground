@@ -51,6 +51,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
                 .requestMatchers(HttpMethod.GET, "/products").permitAll()
+                .requestMatchers("/users/**").hasRole("ADMIN")
                 .requestMatchers("/products/**").authenticated()
                 .anyRequest().permitAll()
                 )
