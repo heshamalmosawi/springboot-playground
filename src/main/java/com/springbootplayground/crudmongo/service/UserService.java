@@ -81,6 +81,10 @@ public class UserService {
 
     public User getById(String id) {
         return userRepo.findById(id)
+                .map(user -> {
+                    user.setPassword(null);
+                    return user;
+                })
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
@@ -103,7 +107,9 @@ public class UserService {
         existingUser.setEmail(user.getEmail());
         existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return userRepo.save(existingUser);
+        User updatedUser = userRepo.save(existingUser);
+        updatedUser.setPassword(null);
+        return updatedUser;
     }
 
     public void deleteUser(String id) {
