@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.springbootplayground.crudmongo.dto.LoginRequest;
 import com.springbootplayground.crudmongo.dto.RegisterRequest;
+import com.springbootplayground.crudmongo.dto.UserDTO;
 import com.springbootplayground.crudmongo.model.User;
 import com.springbootplayground.crudmongo.repository.UserRepository;
 import com.springbootplayground.crudmongo.service.security.jwtService;
@@ -83,22 +84,24 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User updateUser(String id, User user) {
+    public User updateUser(String id, UserDTO user) {
         User existingUser = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (user.getName() != null && !user.getName().isEmpty()) {
-            existingUser.setName(user.getName());
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new RuntimeException("Name is required");
         }
-        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-            if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$")) {
-                throw new RuntimeException("Invalid email format");
-            }
-            existingUser.setEmail(user.getEmail());
+        if (user.getEmail() == null || !user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            throw new RuntimeException("Invalid or missing email");
         }
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new RuntimeException("Password is required for full update");
         }
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepo.save(existingUser);
     }

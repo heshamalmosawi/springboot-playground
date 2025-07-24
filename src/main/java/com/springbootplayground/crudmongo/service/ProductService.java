@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.springbootplayground.crudmongo.dto.ProductDTO;
 import com.springbootplayground.crudmongo.model.Product;
 import com.springbootplayground.crudmongo.repository.ProductRepository;
 import com.springbootplayground.crudmongo.repository.UserRepository;
@@ -28,7 +29,14 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
-    public Product create(Product product) { 
+    public Product create(ProductDTO productDTO) {
+        Product product = Product.builder()
+                .name(productDTO.getName())
+                .description(productDTO.getDescription())
+                .price(productDTO.getPrice())
+                .userId(productDTO.getUserId())
+                .build();
+
         if (product.getName() == null || product.getName().isEmpty()) {
             throw new RuntimeException("Product name is required");
         }
@@ -48,30 +56,24 @@ public class ProductService {
         }
 
         return prodRepo.save(product);
-     }
-    public Product update(String id, Product product) { 
+    }
+
+    public Product update(String id, ProductDTO productDTO) {
         Product existingProduct = prodRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        if (product.getName() != null && !product.getName().isEmpty()) {
-            existingProduct.setName(product.getName());
-        }
-        if (product.getPrice() > 0) {
-            existingProduct.setPrice(product.getPrice());
-        }
-        if (product.getDescription() != null && !product.getDescription().isEmpty()) {
-            existingProduct.setDescription(product.getDescription());
-        }
-        if (product.getUserId() != null && !product.getUserId().isEmpty()) {
-            if (!userRepo.existsById(product.getUserId())) {
-                throw new RuntimeException("User does not exist");
-            }
-            existingProduct.setUserId(product.getUserId());
+        if (productDTO.getUserId() != null && !userRepo.existsById(productDTO.getUserId())) {
+            throw new RuntimeException("User does not exist");
         }
 
+        existingProduct.setName(productDTO.getName());
+        existingProduct.setDescription(productDTO.getDescription());
+        existingProduct.setPrice(productDTO.getPrice());
+        existingProduct.setUserId(productDTO.getUserId());
+
         return prodRepo.save(existingProduct);
-     }
-     
+    }
+
     public void delete(String id) {
         Product existingProduct = prodRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

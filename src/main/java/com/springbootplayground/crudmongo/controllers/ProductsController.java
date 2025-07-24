@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springbootplayground.crudmongo.dto.ProductDTO;
 import com.springbootplayground.crudmongo.model.Product;
 import com.springbootplayground.crudmongo.service.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/products")
@@ -51,9 +54,9 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDTO createProductDTO) {
         try {
-            Product createdProduct = prodService.create(product);
+            Product createdProduct = prodService.create(createProductDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -61,7 +64,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @Valid @RequestBody ProductDTO product) {
         try {
             Product updatedProduct = prodService.update(id, product);
             return ResponseEntity.ok(updatedProduct);
