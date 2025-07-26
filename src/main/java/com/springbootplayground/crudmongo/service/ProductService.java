@@ -2,6 +2,9 @@ package com.springbootplayground.crudmongo.service;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.springbootplayground.crudmongo.dto.ProductDTO;
@@ -52,7 +55,7 @@ public class ProductService {
         }
 
         if (!userRepo.existsById(product.getUserId())) {
-            throw new RuntimeException("User does not exist");
+            product.setUserId(getCurrentUserId());
         }
 
         return prodRepo.save(product);
@@ -78,5 +81,14 @@ public class ProductService {
         Product existingProduct = prodRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         prodRepo.delete(existingProduct);
+    }
+
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return userDetails.getUsername();
+        }
+        throw new RuntimeException("User not authenticated");
     }
 }

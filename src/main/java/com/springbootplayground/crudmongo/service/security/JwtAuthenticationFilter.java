@@ -58,14 +58,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Extract claims (like email and role) from the token
             var claims = jwtService.extractAllClaims(token);
             String email = claims.getSubject();
+            String id = (String) claims.get("id");
             String role = (String) claims.get("role");
-            System.out.println("JwtAuthenticationFilter: Token claims extracted - Email: " + email + ", Role: " + role);
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("JwtAuthenticationFilter: Token claims extracted - Email: " + email + ", Role: " + role + ", ID: " + id);
+            if (id != null && email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // Create authorities list
                 var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
                 System.out.println("JwtAuthenticationFilter: Authorities created for user: " + email + " with role: " + role);
                 // Set the Authentication in SecurityContext
-                var userDetails = new org.springframework.security.core.userdetails.User(email, "", authorities);
+                var userDetails = new org.springframework.security.core.userdetails.User(id, "", authorities);
                 var auth = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
