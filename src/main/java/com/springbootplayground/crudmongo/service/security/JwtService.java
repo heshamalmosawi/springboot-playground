@@ -14,7 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Service
-public class jwtService {
+public class JwtService {
 
     // usually from .env but hardcoded since this is a playground project :)
     private static final String SECRET = "a_very_long_and_not_secretive_secret_key_12345678901234567890123456789012";

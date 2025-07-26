@@ -2,6 +2,7 @@ package com.springbootplayground.crudmongo.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,11 +25,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/products")
 public class ProductsController {
 
-    private final ProductService prodService;
-
-    public ProductsController(ProductService prodService) {
-        this.prodService = prodService;
-    }
+    @Autowired
+    private ProductService prodService;
 
     @GetMapping
     public ResponseEntity<Object> getAllProducts() {

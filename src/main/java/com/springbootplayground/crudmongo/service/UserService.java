@@ -10,7 +10,7 @@ import com.springbootplayground.crudmongo.dto.RegisterRequest;
 import com.springbootplayground.crudmongo.dto.UserDTO;
 import com.springbootplayground.crudmongo.model.User;
 import com.springbootplayground.crudmongo.repository.UserRepository;
-import com.springbootplayground.crudmongo.service.security.jwtService;
+import com.springbootplayground.crudmongo.service.security.JwtService;
 
 @Service
 public class UserService {
@@ -69,7 +69,7 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return jwtService.generateToken(user);
+        return JwtService.generateToken(user);
     }
 
     public List<User> getAllUsers() {
