@@ -69,12 +69,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/register",
-							"protocol": "http",
+							"raw": "{{baseurl}}/auth/register",
 							"host": [
-								"localhost"
+								"{{baseurl}}"
 							],
-							"port": "8080",
 							"path": [
 								"auth",
 								"register"
@@ -90,7 +88,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"hesham@domain.com\",\n    \"password\": \"password\"\n}",
+							"raw": "{\n    \"email\": \"example@domain.com\",\n    \"password\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -98,12 +96,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/auth/login",
-							"protocol": "http",
+							"raw": "{{baseurl}}/auth/login",
 							"host": [
-								"localhost"
+								"{{baseurl}}"
 							],
-							"port": "8080",
 							"path": [
 								"auth",
 								"login"
@@ -159,13 +155,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseurl}}/products/1",
+									"raw": "{{baseurl}}/products/6884dfe9ff72c7349d39504e",
 									"host": [
 										"{{baseurl}}"
 									],
 									"path": [
 										"products",
-										"1"
+										"6884dfe9ff72c7349d39504e"
 									]
 								}
 							},
@@ -183,7 +179,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Gaming Laptop\",\n    \"description\": \"High-performance laptop with RTX 4060, 16GB RAM, and 1TB SSD\",\n    \"price\": 1299.99,\n    \"userId\": \"687fe11c3ff89ffce8b2df02\"\n}",
+							"raw": "{\n    \"name\": \"Hesham\",\n    \"description\": \"High-performance laptop with RTX 4060, 16GB RAM, and 1TB SSD\",\n    \"price\": 0.25,\n    \"userId\": \"687fe11c3ff89ffce8b2df02\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -203,13 +199,13 @@
 					"response": []
 				},
 				{
-					"name": "Update Product",
+					"name": "Replace Product",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"price\": 600.99\n}",
+							"raw": "{\n    \"name\": \"iPhone 13\",\n    \"price\": 499.99,\n    \"userId\": \"{{dummy_user_id}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -217,13 +213,40 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}/products/6881379a901b7be30976d143",
+							"raw": "{{baseurl}}/products/6884dfe9ff72c7349d39504e",
 							"host": [
 								"{{baseurl}}"
 							],
 							"path": [
 								"products",
-								"6881379a901b7be30976d143"
+								"6884dfe9ff72c7349d39504e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Hesham\",\n    \"price\": 2299.99,\n    \"userId\": \"{{dummy_user_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/products/6884e145b52d1d9f5385d3df",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"products",
+								"6884e145b52d1d9f5385d3df"
 							]
 						}
 					},
@@ -430,12 +453,12 @@
 	"variable": [
 		{
 			"key": "baseurl",
-			"value": "http://localhost:8080",
+			"value": "https://localhost:8443",
 			"type": "string"
 		},
 		{
 			"key": "token",
-			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaXNoYW1AaC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpZCI6IjY4N2ZkNDZjNTAxZDE3NzM0NTMzM2NmNSIsImlhdCI6MTc1MzI5OTI4OX0._mNXPk0LlbkJGOFEZslKv5kZxhrW3m2HH5rb68Ipxtw",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJleGFtcGxlQGRvbWFpbi5jb20iLCJyb2xlIjoidXNlciIsImlkIjoiNjg4NGIzYmUyNmIyMzgzNjUyYTQ0OGVkIiwiaWF0IjoxNzUzNTI3NDgwfQ.0_KZF9QNYNtDIrF9bqykSYSH4OgiIveUxgYS64_Tknk",
 			"type": "string"
 		},
 		{
@@ -445,7 +468,7 @@
 		},
 		{
 			"key": "dummy_user_id",
-			"value": "687fd626f09631fa2cd6ab3d",
+			"value": "6884b3be26b2383652a448ed",
 			"type": "string"
 		}
 	]

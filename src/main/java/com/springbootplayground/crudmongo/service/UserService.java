@@ -88,31 +88,34 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User updateUser(String id, UserDTO user) {
+    public User update(String id, UserDTO user) {
         User existingUser = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (user.getName() == null || user.getName().isEmpty()) {
-            throw new RuntimeException("Name is required");
+        if (user.getName() != null && !user.getName().isEmpty()) {
+            existingUser.setName(user.getName());
         }
-        if (user.getEmail() == null || !user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-            throw new RuntimeException("Invalid or missing email");
+        if (user.getEmail() != null && user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            throw new RuntimeException("Password is required for full update");
+        if (user.getRole() != null) {
+            if (user.getRole().equals("user") || user.getRole().equals("admin")) {
+                existingUser.setRole(user.getRole());
+            } else {
+                throw new RuntimeException("Invalid role");
+            }
         }
-
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User updatedUser = userRepo.save(existingUser);
         updatedUser.setPassword(null);
         return updatedUser;
     }
 
-    public void deleteUser(String id) {
+    public void delete(String id) {
         User existingUser = userRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userRepo.delete(existingUser);

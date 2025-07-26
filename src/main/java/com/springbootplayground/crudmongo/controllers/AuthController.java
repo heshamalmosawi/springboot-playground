@@ -27,7 +27,7 @@ public class AuthController {
             userService.registerUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
@@ -37,7 +37,7 @@ public class AuthController {
             String token = userService.loginUser(request);
             return ResponseEntity.ok(token);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: " + e.getMessage());
         }
     }
 }

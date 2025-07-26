@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (id != null && email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // Create authorities list
                 var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-                System.out.println("JwtAuthenticationFilter: Authorities created for user: " + email + " with role: " + role);
+
                 // Set the Authentication in SecurityContext
                 var userDetails = new org.springframework.security.core.userdetails.User(id, "", authorities);
                 var auth = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);

@@ -61,7 +61,7 @@ public class ProductService {
         return prodRepo.save(product);
     }
 
-    public Product update(String id, ProductDTO productDTO) {
+    public Product replaceProduct(String id, ProductDTO productDTO) {
         Product existingProduct = prodRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -73,6 +73,26 @@ public class ProductService {
         existingProduct.setDescription(productDTO.getDescription());
         existingProduct.setPrice(productDTO.getPrice());
         existingProduct.setUserId(productDTO.getUserId());
+
+        return prodRepo.save(existingProduct);
+    }
+
+    public Product update(String id, ProductDTO productDTO) {
+        Product existingProduct = prodRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (productDTO.getUserId() != null && !userRepo.existsById(productDTO.getUserId())) {
+            throw new RuntimeException("User does not exist");
+        }
+        if (productDTO.getName() != null && !productDTO.getName().isEmpty()) {
+            existingProduct.setName(productDTO.getName());
+        }
+        if (productDTO.getPrice() > 0) {
+            existingProduct.setPrice(productDTO.getPrice());
+        }
+        if (productDTO.getDescription() != null && !productDTO.getDescription().isEmpty()) {
+            existingProduct.setDescription(productDTO.getDescription());
+        }
 
         return prodRepo.save(existingProduct);
     }
